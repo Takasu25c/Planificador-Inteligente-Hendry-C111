@@ -32,3 +32,4 @@
 12- Fuente de Poder
 13- Regulador de voltaje
 14- Tester de fuente de poder
+15- Maquina de Reballing
