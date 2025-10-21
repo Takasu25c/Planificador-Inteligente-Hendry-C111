@@ -15,3 +15,20 @@
  8- Reparacion de chipset de video    | 9h
  9- Mantenimiento(bajo, medio, alto)  | 1h , 2h , 4h
 10- Reparacion sencilla               | 2h
+# Recursos
+ Estos son los recursos que existen en mi dominio
+ Herramientas y recursos:                    Personal:
+1- Osciloscopio                           1- Tecnico Dany
+2- Cautin                                 2- Tecnico Andy
+3- Estacion de Calor
+4- Multimetro
+5- Estaño
+6- Flux
+7- Pasta termica
+8- Alcohol Isopropilico
+9- Goma de borrar
+10- Monitor con Boardview
+11- Lupa con lámpara
+12- Fuente de Poder
+13- Regulador de voltaje
+14- Tester de fuente de poder
