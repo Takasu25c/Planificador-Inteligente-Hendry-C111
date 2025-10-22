@@ -20,7 +20,7 @@
  Herramientas y recursos:                    Personal:
 1- Osciloscopio                           1- Tecnico Dany
 2- Cautin                                 2- Tecnico Andy
-3- Estacion de Calor
+3- Estacion de Calor                      3- Tecnico Rudy
 4- Multimetro
 5- Estaño
 6- Flux

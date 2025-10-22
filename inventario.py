@@ -1,3 +1,0 @@
-listarecursos = []
-listahumanos = []
-
