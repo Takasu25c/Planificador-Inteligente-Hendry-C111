@@ -1,0 +1,1 @@
+lista_de_eventos = ["Defectacion","Reparacion de tarjeta de video","Reparacion de Socket","Reparacion de los 15 seg","Reparacion del 12v del procesador","Cambio de pastilla de audio","Sustitucion de puerto usb","Sustitucion de puerto de video","Reparacion de chipset de video","Mantenimiento: Bajo","Mantenimiento: Medio","Mantenimiento: Alto","Reparacion Sencilla"]
