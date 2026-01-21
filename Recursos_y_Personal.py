@@ -1,3 +1,15 @@
 listarecursos = ["Osciloscopio", "Cautin", "Estacion de Calor","Multimetro", "Estaño", "Flux", "Pasta termica", "Alcohol Isopropilico", "Goma de borrar", "Monitor con BoardView", "Lupa con lampara","Fuente de poder", "Regulador de voltaje", "Tester de fuente de poder", "Maquina de Reballing","Sopladora/Aspiradora de aire","Brocha", "Cepillo"]
 tecnicos = 3
-
+rdefectacion = ("Osciloscopio","Multimetro","Alcohol Isopropilico","Goma de borrar","Monitor con Boardview","Fuente de Poder","Regulador de voltaje")
+rtvideo = ("Estacion de Calor","Cautin","Estaño","Flux","Pasta termica","Lupa con lampara","Maquina de Reballing")
+rsocket = ("Maquina de Reballing")
+r15seg = ("Flux","Estacion de Calor","Cautin")
+r12vcpu = ("Flux","Osciloscopio","Multimetro","Monitor con Boardview","Cautin","Estacion de Calor","Fuente de Poder","Tester de fuente de poder")
+rpaudio = ("Flux","Estacion de Calor","Cautin")
+rsususb = ("Flux","Estacion de Calor","Cautin")
+rpvideo = ("Flux","Estacion de Calor","Cautin")
+rcvideo = ("Multimetro","Osciloscopio","Monitor con Boardview","Estacion de Calor","Cautin","Flux","Regulador de Voltaje")
+mbajo = ("Pasta termica")
+mmedio = ("Pasta termica","Goma de borrar","Brocha")
+malto = ("Pasta Termica","Goma de borrar","Alcohol Isopropilico","Brocha","Cepillo","Sopladora/Aspiradora de aire")
+rsencilla = ("Cautin","Flux")
