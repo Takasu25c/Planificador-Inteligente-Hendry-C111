@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import Recursos_y_Personal as rh
 import eventos as ev
 import datetime as dt
@@ -30,9 +31,19 @@ def agregar_recurso(recurso):
     else:
       st.session_state.recursos_en_uso.append(recurso)
       st.success("Recurso Agregado")
+def registrar_evento(evento):
+  registrar = st.button("Registrar Evento")
+  if registrar:
+    recursos_evento = st.session_state.recursos_en_uso.copy()
+    st.session_state.eventos_en_curso[nombre] = {
+      "tipo de evento": evento,
+      "horario de inicio": inicio_evento,
+      "horario de terminacion": inicio_evento + duracion_eventos[evento],
+      "recursos": recursos_evento
+    }
+    st.session_state.recursos_en_uso.clear()
 def iniciar_evento(evento):
    recurso =(st.selectbox("Selecione los recursos a usar",rh.listarecursos))
-   inicio_evento = st.datetime_input("Seleccione la fecha",dt.datetime.now())
    if evento == "Defectacion":
      if recurso not in rh.rdefectacion:
        st.error("No compatible con el servicio")
@@ -44,11 +55,11 @@ def iniciar_evento(evento):
      else:
        agregar_recurso(recurso)
    elif evento == "Reparacion de Socket":
-     if recurso not in rh.socket:
+     if recurso not in rh.rsocket:
        st.error("No compatible con el servicio")
      else:
        agregar_recurso(recurso)
-   elif evento == "Reparacion de los 15 seg":
+   elif evento == "Reparacion de los 15 segundos":
      if recurso not in rh.r15seg:
        st.error("No compatible con el servicio")
      else:
@@ -101,8 +112,13 @@ def iniciar_evento(evento):
 st.title("TERAX",text_alignment= "center")
 st.header("Reparacion de Equipos de Computo",text_alignment= "center")
 evento = st.selectbox("Seleccione el tipo de reparacion",ev.lista_de_eventos)
+nombre = st.text_input("Por favor diga su nombre","Nombre y apellidos")
+inicio_evento = st.datetime_input("Seleccione la fecha",dt.datetime.now())
 iniciar_evento(evento)
+registrar_evento(evento)
 st.write("Recursos en uso:", st.session_state.recursos_en_uso)
+df = pd.DataFrame(st.session_state.eventos_en_curso)
+st.write(df)
 def get_base64(bin_file): 
     with open(bin_file, 'rb') as f: 
         data = f.read() 
