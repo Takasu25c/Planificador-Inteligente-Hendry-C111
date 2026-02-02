@@ -37,7 +37,7 @@
 17- Brocha
 18- Cepillo
 # Eventos + Recursos + Restricciones
-0- Defectacion (Osciloscopio, Multimetro, Alcohol isopropilico, Goma de borrar, Monitor con Boardview, Fuente de Poder, Regulador de voltaje) (Osciloscopio != Multimetro, Fuente de Poder!= Regulador de voltaje) (Osciloscopio = Monitor con Boardview, Multimetro = Monitor con Boardview) 
+0- Defectacion (Osciloscopio, Multimetro, Alcohol isopropilico, Goma de borrar, Monitor con Boardview, Fuente de Poder, Regulador de voltaje, Lupa con lampara) (Osciloscopio != Multimetro, Fuente de Poder!= Regulador de voltaje) (Osciloscopio = Monitor con Boardview, Multimetro = Monitor con Boardview) 
 1- Reparacion de tarjeta de video (Estacion de Calor,Cautin, Estaño, Flux, Pasta termica, Lupa con lampara, Maquina de Reballing) (Estacion de Calor != Cautin) 
 2- Reparacion de Socket (Maquina de reballing)
 3- Reparacion de los 15 seg (Flux, Estacion de Calor, Cautin) (Estacion de Calor != Cautin) (Flux = Estacion de Calor, Flux = Cautin)

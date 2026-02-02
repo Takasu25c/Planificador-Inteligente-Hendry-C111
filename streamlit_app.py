@@ -5,6 +5,8 @@ import eventos as ev
 import datetime as dt
 import base64
 import planner as pn
+import os
+import json
 def get_base64(bin_file): 
     with open(bin_file, 'rb') as f: 
         data = f.read() 
@@ -47,7 +49,7 @@ def agregar_recurso(recurso):
    with col1:
     boton = st.button("Agregar Recurso")
    with col2:
-    numero =st.number_input("Indice",min_value=0,max_value= len(st.session_state.recursos_en_uso))
+    numero =st.number_input("Indice",min_value=0,max_value= len(st.session_state.recursos_en_uso), key= "Resource Index")
    with col3:
      eliminar = st.button("Eliminar recurso")
    if eliminar:
@@ -59,39 +61,125 @@ def agregar_recurso(recurso):
     if recurso in st.session_state.recursos_en_uso:
       st.error("Recurso no disponible")
     else:
-      st.session_state.recursos_en_uso.append(recurso)
-      st.success("Recurso Agregado")
-def registrar_evento(evento):
-  def registro():
+      verificacion = verificar_restricciones(recurso)
+      if verificacion == True:
+        st.session_state.recursos_en_uso.append(recurso)
+        st.success("Recurso Agregado")      
+def verificar_restricciones(recurso):
+  primer_elemento_exclusion = ("Osciloscopio","Fuente de poder","Estacion de Calor")
+  segundo_elemento_exclusion = ("Multimetro","Regulador de voltaje","Cautin")
+  if recurso in primer_elemento_exclusion:
+    if segundo_elemento_exclusion[primer_elemento_exclusion.index(recurso)] in st.session_state.recursos_en_uso:
+      st.error("Ya se selecciono una herramienta equivalente")
+      return False
+    else:
+      return True
+  elif recurso in segundo_elemento_exclusion:
+    if primer_elemento_exclusion[segundo_elemento_exclusion.index(recurso)] in st.session_state.recursos_en_uso:
+      st.error("Ya se selecciono una herramienta equivalente")
+      return False
+    else:
+      return True
+  else:
+    return True
+def verificar_inclusiones(recursos):
+  if "Osciloscopio" in recursos or "Multimetro" in recursos:
+    if "Monitor con BoardView" not in recursos:
+      st.error("No se agrego Monitor con Boardview")
+      return False
+    else:
+      return True
+  elif "Monitor con BoardView" in recursos:
+    if "Osciloscopio" not in recursos and "Multimetro" not in recursos:
+      st.error("No se agrego Osiloscopio o Multimetro")
+      return False
+    else:
+      return True
+  elif "Estacion de Calor" in recursos or "Cautin" in recursos:
+    if "Flux" not in recursos and "Estaño" not in recursos:
+      st.error("Debe agregar Flux o Estaño")
+      return False
+    else:
+      return True
+  elif "Flux" in recursos or "Estaño" in recursos:
+    if "Cautin" not in recursos and "Estacion de Calor" not in recursos:
+      st.error("No se agrego Cautin o Estacion de Calor")
+      return False
+    else:
+      return True
+def registro(inicio_evento):
     reparacion = {
       "Nombre": nombre,
       "Tipo de Evento": evento,
       "Horario de Inicio": inicio_evento,
       "Horario de Terminacion": inicio_evento + duracion_eventos[evento],
-      "Recursos": recursos_evento
+      "Recursos": st.session_state.recursos_en_uso.copy()
       }
     st.session_state.eventos_en_curso.append(reparacion)
     pn.guardar_estado(st.session_state.eventos_en_curso)
     st.success("Registro añadido")
-  registrar = st.button("Registrar Evento")
-  if registrar:
-    recursos_evento = st.session_state.recursos_en_uso.copy()
-    if st.session_state.eventos_en_curso == False:
-      registro()
+def registrar_evento(evento):
+  col1,col2,col3 = st.columns([0.4,0.2,0.4],vertical_alignment= "center")
+  with col1:
+    registrar = st.button("Registrar Evento")
+  with col2:
+    nevento = st.number_input("Indice",min_value=0,max_value= len(st.session_state.eventos_en_curso),key= "Evemt Index")
+  with col3:
+    eliminar = st.button("Eliminar evento")
+  if eliminar:
+    if not st.session_state.eventos_en_curso:
+      st.error("No hay eventos en la lista")
     else:
-      for herramienta in recursos_evento:
-        for eventico in st.session_state.eventos_en_curso:
-          if herramienta in eventico["Recursos"]:
-            if not inicio_evento + duracion_eventos[evento] <= eventico["Horario de Inicio"] or inicio_evento >= eventico["Horario de Terminacion"]:
-              st.error(f"El/La {herramienta} no esta disponible en ese horario")
-              return
-            else:
-              registro()
-          else:
-            continue
+      del st.session_state.eventos_en_curso[nevento]
+      pn.guardar_estado(st.session_state.eventos_en_curso)
+      st.session_state.eventos_en_curso = pn.cargar_estado(st.session_state.eventos_en_curso)
+  if registrar:
+    if verificar_inclusiones(st.session_state.recursos_en_uso) == True:
+      recursos_evento = st.session_state.recursos_en_uso.copy()
+      if st.session_state.eventos_en_curso == False:
+        registro(inicio_evento)
       else:
-        registro()
-    st.session_state.recursos_en_uso.clear()
+        for herramienta in recursos_evento:
+          for eventico in st.session_state.eventos_en_curso:
+            inicio = eventico["Horario de Inicio"]
+            fin = eventico["Horario de Terminacion"]
+            if isinstance(inicio, str): 
+              inicio = dt.datetime.fromisoformat(inicio) 
+            if isinstance(fin, str): 
+              fin = dt.datetime.fromisoformat(fin)
+            if herramienta in eventico["Recursos"]:
+              final_evento = inicio_evento + duracion_eventos[evento]
+              nosolapan = (final_evento <= inicio) or (inicio_evento >= fin)
+              if not nosolapan:
+                st.error(f"El/La {herramienta} no esta disponible en ese horario")
+                return  
+              
+                
+            else:
+              continue
+      registro(inicio_evento)  
+      st.session_state.recursos_en_uso.clear()
+def busqueda_automatica(lista_eventos,evento,inicio):
+  busqueda = st.button("Busqueda de Huecos",width= "content")
+  if busqueda:
+    horarios = []
+    for eventos in lista_eventos:
+      horarios.append(eventos["Horario de Inicio"])
+      horarios.append(eventos["Horario de Terminacion"])
+    counter = 1
+    while counter < len(horarios):
+      if counter == len(horarios)-1:
+        inicio = horarios[counter] + dt.timedelta(minutes= 15)
+        registro(inicio)
+        st.session_state.recursos_en_uso.clear()
+        break
+      hueco = horarios[counter+1] - horarios[counter]
+      if hueco >= duracion_eventos[evento] + dt.timedelta(minutes= 15):
+        registro(horarios[counter]+dt.timedelta(minutes= 15))
+        st.session_state.recursos_en_uso.clear()
+        break
+      else:
+        counter = counter + 2
 def iniciar_evento(evento):
    recurso =(st.selectbox("Selecione los recursos a usar",rh.listarecursos))
    if evento == "Defectacion":
@@ -164,8 +252,10 @@ st.header("Reparacion de Equipos de Computo",text_alignment= "center")
 evento = st.selectbox("Seleccione el tipo de reparacion",ev.lista_de_eventos)
 nombre = st.text_input("Por favor diga su nombre","Nombre y apellidos")
 inicio_evento = st.datetime_input("Seleccione la fecha",dt.datetime.now())
+st.session_state.eventos_en_curso = sorted(st.session_state.eventos_en_curso,key= lambda x: x["Horario de Terminacion"])
 iniciar_evento(evento)
 registrar_evento(evento)
+busqueda_automatica(st.session_state.eventos_en_curso,evento,inicio_evento)
 rs = pd.DataFrame(st.session_state.recursos_en_uso)
 st.dataframe(st.session_state.recursos_en_uso)
 df = pd.DataFrame(st.session_state.eventos_en_curso)
