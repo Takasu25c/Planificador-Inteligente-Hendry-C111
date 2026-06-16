@@ -1,0 +1,48 @@
+[project]
+name = "Planificador Inteligente"
+version = "1.0.0"
+description = "Planificador Inteligente Hendry Quintana Ruiz C111"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = ""}
+keywords = ["Planificardor", "Reparacion", "Motherboards"]
+authors = [
+  {email = "takasu25c@gmail.com"},
+  {name = "Hendry Quintana Ruiz"}
+]
+maintainers = [
+  {name = "Hendry Quintana Ruiz", email = "hendryruizquintana@gmail.com"}
+]
+classifiers = [
+  "Development Status :: 10 - Completed",
+  "Programming Language :: Python"
+]
+
+dependencies = [
+  "httpx",
+  "streamlit >=1.5.2",
+  "pandas >= 2.3.3",
+  "json >=4.25.1"
+]
+
+[project.optional-dependencies]
+test = [
+  ""
+]
+
+[project.urls]
+homepage = "https://github.com/Takasu25c/Planificador-Inteligente-Hendry-C111"
+documentation = "https://github.com/Takasu25c/Planificador-Inteligente-Hendry-C111/blob/main/README.md"
+repository = "https://github.com/Takasu25c/Planificador-Inteligente-Hendry-C111"
+changelog = "https://github.com/Takasu25c/Planificador-Inteligente-Hendry-C111"
+
+[project.scripts]
+salvaenjson = "planner.py"
+listado_de_eventos = "eventos.py"
+recursos = "Recursos_y_Personal.py"
+centralcode = "streamlit_app.py"
+[project.gui-scripts]
+gui = "streamlit_app.py"
+
+[project.entry-points."streamlit_app"]
+entry = "streamlit_app.py"
